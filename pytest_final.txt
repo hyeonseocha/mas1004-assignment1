@@ -1,0 +1,15 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\sk408\Documents\mas1004-assignment1\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\sk408\Documents\mas1004-assignment1
+configfile: pytest.ini
+collecting ... collected 6 items
+
+tests/test_export.py::test_every_file_is_written PASSED                  [ 16%]
+tests/test_export.py::test_model_json_says_how_to_prepare_a_photo PASSED [ 33%]
+tests/test_export.py::test_onnx_file_gives_the_answers_pytorch_gives PASSED [ 50%]
+tests/test_export.py::test_selftest_holds_three_square_pictures_and_their_answers PASSED [ 66%]
+tests/test_export.py::test_selftest_picture_is_already_resized PASSED    [ 83%]
+tests/test_export.py::test_export_refuses_the_wrong_number_of_outputs PASSED [100%]
+
+============================== 6 passed in 5.15s ==============================

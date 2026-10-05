@@ -1,0 +1,15 @@
+﻿"Reusable clear cups": search returned 96 links, downloading...
+"Reusable clear cups": kept 10 images in data\raw\reusable_clear_cups
+  duckduckgo stopped at page 1: No results found.
+"Disposable plastic takeout cups": search returned 35 links, downloading...
+"Disposable plastic takeout cups": kept 10 images in data\raw\disposable_plastic_takeout_cups
+  duckduckgo stopped at page 1: No results found.
+"Ceramic cafe mugs": search returned 35 links, downloading...
+"Ceramic cafe mugs": kept 10 images in data\raw\ceramic_cafe_mugs
+
+Summary
+  Reusable clear cups            10
+  Disposable plastic takeout cups 10
+  Ceramic cafe mugs              10
+
+Warning: the smallest class has only 10 images. Try a different search phrase for that class.

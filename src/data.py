@@ -7,6 +7,8 @@ that the model can eat.
 Run `pytest tests/test_data.py` after you fill them in.
 """
 
+from pathlib import Path
+
 import numpy as np
 
 # Files with any other extension should be ignored.
@@ -50,7 +52,27 @@ def prepare_image(image):
     The web page does these same six steps in JavaScript. If your version is
     different, the self test badge at the top of your page turns red.
     """
-    raise NotImplementedError("Problem 2: fill in prepare_image")
+    from torchvision.transforms import (
+        CenterCrop,
+        Compose,
+        Normalize,
+        Resize,
+        ToTensor,
+    )
+    from torchvision.transforms import InterpolationMode
+
+    # Step 1: Convert to RGB
+    img = image.convert("RGB")
+
+    # Steps 2-6: resize, center crop, to tensor (÷255, channels first), normalise
+    transform = Compose([
+        Resize(RESIZE, interpolation=InterpolationMode.BILINEAR),
+        CenterCrop(CROP),
+        ToTensor(),
+        Normalize(MEAN, STD),
+    ])
+
+    return transform(img).numpy().astype(np.float32)
 
 
 def load_folder(root):
@@ -83,7 +105,41 @@ def load_folder(root):
     Memory: every image becomes 3 x 224 x 224 numbers of 4 bytes, about 0.6 MB.
     750 images is about 450 MB. That fits on Colab and on most laptops.
     """
-    raise NotImplementedError("Problem 2: fill in load_folder")
+    from PIL import Image
+
+    root = Path(root)
+    # Sub-folders (classes) sorted alphabetically
+    class_names = sorted(
+        [p.name for p in root.iterdir() if p.is_dir()]
+    )
+
+    X_list = []
+    y_list = []
+    paths_list = []
+
+    for class_index, class_name in enumerate(class_names):
+        class_dir = root / class_name
+        # All image files in this folder, sorted
+        files = sorted(
+            p for p in class_dir.iterdir()
+            if p.is_file() and p.suffix.lower() in IMAGE_SUFFIXES
+        )
+
+        for file_path in files:
+            try:
+                img = Image.open(file_path)
+                img.load()          # make sure the file is readable
+                prepared = prepare_image(img)
+                X_list.append(prepared)
+                y_list.append(class_index)
+                paths_list.append(file_path)
+            except Exception:
+                # Skip broken files
+                continue
+
+    X = np.stack(X_list, axis=0).astype(np.float32)
+    y = np.array(y_list, dtype=np.int64)
+    return X, y, class_names, paths_list
 
 
 def split_train_test(X, y, paths, test_ratio=0.2, seed=0):
@@ -102,4 +158,24 @@ def split_train_test(X, y, paths, test_ratio=0.2, seed=0):
         up with a class that has no test images at all, and then your accuracy
         number means nothing.
     """
-    raise NotImplementedError("Problem 2: fill in split_train_test")
+    rng = np.random.RandomState(seed)
+
+    train_idx = []
+    test_idx = []
+
+    # Process each class separately to guarantee stratification
+    for class_val in sorted(np.unique(y)):
+        idx = np.where(y == class_val)[0]
+        rng.shuffle(idx)
+        n_test = max(1, round(len(idx) * test_ratio))
+        test_idx.extend(idx[:n_test].tolist())
+        train_idx.extend(idx[n_test:].tolist())
+
+    # Sort each list so the result is deterministic
+    train_idx.sort()
+    test_idx.sort()
+
+    return (
+        X[train_idx], y[train_idx], [paths[i] for i in train_idx],
+        X[test_idx],  y[test_idx],  [paths[i] for i in test_idx],
+    )

@@ -1,0 +1,10 @@
+﻿uv : You need at least 3 classes.
+위치 줄:1 문자:62
++ ... signment1"; uv run python src/collect.py --class
+es "Reusable clear cu ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (You need 
+    at least 3 classes.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

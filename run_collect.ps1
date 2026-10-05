@@ -1,0 +1,2 @@
+Set-Location "C:\Users\sk408\Documents\mas1004-assignment1"
+uv run python src/collect.py --classes "Reusable clear cups,Disposable plastic takeout cups,Ceramic cafe mugs" --n 150 2>&1 | Tee-Object -FilePath "collect_output.txt"

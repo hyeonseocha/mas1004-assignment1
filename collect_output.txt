@@ -1,0 +1,17 @@
+C:\Users\sk408\Documents\mas1004-assignment1\.venv\Lib\site-packages\PIL\Image.py:1136: UserWarning: Palette images with Transparency expressed in bytes should be converted to RGBA images
+  warnings.warn(
+  duckduckgo stopped at page 1: No results found.
+"Reusable clear cups": search returned 380 links, downloading...
+"Reusable clear cups": kept 150 images in data\raw\reusable_clear_cups
+  duckduckgo stopped at page 1: No results found.
+"Disposable plastic takeout cups": search returned 375 links, downloading...
+"Disposable plastic takeout cups": kept 150 images in data\raw\disposable_plastic_takeout_cups
+  duckduckgo stopped at page 1: No results found.
+"Ceramic cafe mugs": search returned 378 links, downloading...
+"Ceramic cafe mugs": kept 150 images in data\raw\ceramic_cafe_mugs
+
+Summary
+  Reusable clear cups            150
+  Disposable plastic takeout cups 150
+  Ceramic cafe mugs              150
+Done! 
