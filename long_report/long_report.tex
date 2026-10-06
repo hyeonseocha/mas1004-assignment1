@@ -27,23 +27,53 @@
 \section*{Problem 1. Categories and images}
 
 \subsection*{Why these categories}
-\fillin{Why these categories, and why you care about them.}
+I really love going to cafes, so when I looked through my smartphone photo
+gallery I realised I had the most pictures of drink cups.  I wanted to choose a
+topic that is familiar in my daily life and easy for me to collect data for.
+With that in mind I picked three categories of drinking vessels that are
+common in everyday life but not in ImageNet's 1,000 classes:
+\emph{reusable clear cups} (e.g.\ tumblers, water glasses),
+\emph{disposable plastic takeout cups} (single-use cold-drink cups with lids),
+and \emph{ceramic cafe mugs} (coffee mugs).  ImageNet has a ``coffee mug''
+class (index 504), so I deliberately named mine ``ceramic cafe mugs'' to avoid
+direct overlap.  The three categories are visually similar enough that the
+task is non-trivial, yet distinguishable by shape, material, and typical
+context.
 
 \subsection*{What I expected the model to use}
 \fillin{What you thought, before training, the model would use to tell them
 apart: shape, colour, texture, background, or something else.}
 
 \subsection*{Images per category}
-\fillin{How many images you got for each category.}
+I downloaded 150 images for each category (450 total) using
+\texttt{src/collect.py}.  Every category returned the full 150 images.
+
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+Category & Downloaded & In \texttt{data/clean/} \\
+\midrule
+ceramic\_cafe\_mugs             & 150 & 150 \\
+disposable\_plastic\_takeout\_cups & 150 & 150 \\
+reusable\_clear\_cups            & 150 & 150 \\
+\bottomrule
+\end{tabular}
+\end{center}
 
 % ---------------------------------------------------------------------------
 \section*{Problem 2. Preparing an image}
 
-\sidebyside{figures/prepare_original.jpg}{\fillin{the image as downloaded}}
-           {figures/prepare_result.png}{\fillin{what prepare\_image made of it}}
+\sidebyside{figures/prepare_original.jpg}{the image as downloaded (any size)}
+           {figures/prepare_result.png}{after \texttt{prepare\_image}: 224~$\times$~224, channels-first, normalised and denormalised back for viewing}
 
-\fillin{What was cut off, and an image where the crop cut off part of the
-thing you care about.}
+The original is $224~\times~224$ or larger.  \texttt{prepare\_image} resizes the
+shorter side to 256, then takes the $224~\times~224$ center crop.  For this
+image the crop removed about \fillin{\#} pixels from the longer side.  No
+important part of the cup was cut off because the cup is centred in the frame.
+For images where the cup is off-centre---for example, a mug in the lower
+corner of the frame---the center crop can cut off part of the handle or the
+rim.  I kept those images in the dataset anyway, because the model may still
+learn useful features from the visible part.
 
 % ---------------------------------------------------------------------------
 \section*{Problem 3. First training runs}
