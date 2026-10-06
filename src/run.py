@@ -27,6 +27,12 @@ import sys
 import time
 from pathlib import Path
 
+# Ensure src/ is on sys.path so that "data" resolves to src/data.py
+# not the data/ directory at the project root.
+_src = str(Path(__file__).resolve().parent)
+if _src not in sys.path:
+    sys.path.insert(0, _src)
+
 from data import load_folder, split_train_test
 from evaluate import (accuracy, confusion_matrix, plot_confusion, plot_history,
                       plot_worst, worst_examples)

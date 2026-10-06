@@ -35,7 +35,25 @@ def build_model(num_classes, pretrained=True, freeze=False):
     Do not put a softmax at the end. The loss function adds it for you, and the
     web page adds it for you.
     """
-    raise NotImplementedError("Problem 3: fill in build_model")
+    from torchvision.models import resnet18, ResNet18_Weights
+
+    if pretrained:
+        model = resnet18(weights=ResNet18_Weights.IMAGENET1K_V1)
+    else:
+        model = resnet18(weights=None)
+
+    # Replace the last layer
+    in_features = model.fc.in_features  # 512
+    model.fc = nn.Linear(in_features, num_classes)
+
+    if freeze:
+        for param in model.parameters():
+            param.requires_grad = False
+        # Unfreeze the new last layer
+        for param in model.fc.parameters():
+            param.requires_grad = True
+
+    return model
 
 
 def train(model, X_train, y_train, X_test, y_test,
@@ -78,7 +96,91 @@ def train(model, X_train, y_train, X_test, y_test,
     The model is trained in place. When this function returns, `model` is the
     trained one, and it is left on the device it was trained on.
     """
-    raise NotImplementedError("Problem 3: fill in train")
+    import numpy as np
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = model.to(device)
+
+    # Only parameters that require gradients
+    trainable_params = [p for p in model.parameters() if p.requires_grad]
+    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(trainable_params, lr=lr)
+
+    # Keep data on CPU, move batches to device
+    X_train_t = torch.from_numpy(X_train)
+    y_train_t = torch.from_numpy(y_train)
+    X_test_t = torch.from_numpy(X_test)
+    y_test_t = torch.from_numpy(y_test)
+
+    n_train = len(X_train)
+    history = {
+        "train_loss": [],
+        "train_acc": [],
+        "test_loss": [],
+        "test_acc": [],
+    }
+
+    for epoch in range(epochs):
+        # --- Training ---
+        model.train()
+        indices = np.random.permutation(n_train)
+
+        train_loss_sum = 0.0
+        train_correct = 0
+        train_total = 0
+
+        for start in range(0, n_train, batch_size):
+            batch_idx = indices[start:start + batch_size]
+            X_batch = X_train_t[batch_idx].to(device)
+            y_batch = y_train_t[batch_idx].to(device)
+
+            optimizer.zero_grad()
+            outputs = model(X_batch)
+            loss = criterion(outputs, y_batch)
+            loss.backward()
+            optimizer.step()
+
+            train_loss_sum += loss.item() * len(y_batch)
+            _, predicted = torch.max(outputs, 1)
+            train_correct += (predicted == y_batch).sum().item()
+            train_total += len(y_batch)
+
+        train_loss = train_loss_sum / train_total
+        train_acc = train_correct / train_total
+
+        # --- Testing ---
+        model.eval()
+        with torch.no_grad():
+            test_loss_sum = 0.0
+            test_correct = 0
+            test_total = 0
+
+            for start in range(0, len(X_test), batch_size):
+                end = start + batch_size
+                X_batch = X_test_t[start:end].to(device)
+                y_batch = y_test_t[start:end].to(device)
+
+                outputs = model(X_batch)
+                loss = criterion(outputs, y_batch)
+
+                test_loss_sum += loss.item() * len(y_batch)
+                _, predicted = torch.max(outputs, 1)
+                test_correct += (predicted == y_batch).sum().item()
+                test_total += len(y_batch)
+
+        test_loss = test_loss_sum / test_total
+        test_acc = test_correct / test_total
+
+        history["train_loss"].append(train_loss)
+        history["train_acc"].append(train_acc)
+        history["test_loss"].append(test_loss)
+        history["test_acc"].append(test_acc)
+
+        print(f"Epoch {epoch + 1:2d}/{epochs}  "
+              f"train loss {train_loss:.4f}  acc {train_acc:.4f}  "
+              f"test loss {test_loss:.4f}  acc {test_acc:.4f}")
+
+    return history
 
 
 def count_trainable(model):
