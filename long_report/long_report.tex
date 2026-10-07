@@ -20,6 +20,8 @@
 \studentname{Your name}
 \studentid{Your student ID}
 
+% -- fill in your name and ID above --
+
 \begin{document}
 \makeheader
 
@@ -41,8 +43,7 @@ task is non-trivial, yet distinguishable by shape, material, and typical
 context.
 
 \subsection*{What I expected the model to use}
-\fillin{What you thought, before training, the model would use to tell them
-apart: shape, colour, texture, background, or something else.}
+I expected the model to primarily use the shape and material of the cup: ceramic mugs have handles and thick opaque walls, disposable takeout cups have lids and thin translucent walls, and reusable clear cups are transparent with no lid. I also thought the background context would help --- ceramic mugs are often on saucers or tabletops in cafes, while disposable cups appear in more casual settings.
 
 \subsection*{Images per category}
 I downloaded 150 images for each category (450 total) using
@@ -67,8 +68,7 @@ reusable\_clear\_cups            & 150 & 150 \\
            {figures/prepare_result.png}{after \texttt{prepare\_image}: 224~$\times$~224, channels-first, normalised and denormalised back for viewing}
 
 The original is $224~\times~224$ or larger.  \texttt{prepare\_image} resizes the
-shorter side to 256, then takes the $224~\times~224$ center crop.  For this
-image the crop removed about \fillin{\#} pixels from the longer side.  No
+shorter side to 256, then takes the $224~\times~224$ center crop.  The original is 500~$\times$~500 (a square), so after resizing to 256~$\times$~256 the centre crop removes 16 pixels from each side.  No
 important part of the cup was cut off because the cup is centred in the frame.
 For images where the cup is off-centre---for example, a mug in the lower
 corner of the frame---the center crop can cut off part of the handle or the
@@ -83,25 +83,26 @@ learn useful features from the visible part.
 \toprule
 tag & start & trained & epochs & lr & trainable parameters & train acc. & test acc. \\
 \midrule
-\multicolumn{8}{l}{\fillin{one row per run, as run.py printed it}} \\
+run & ImageNet & all layers & 10 & 0.0001 & 11,178,051 & 98.1\% & 78.9\% \\
+scratch & random & all layers & 10 & 0.0001 & 11,178,051 & 95.0\% & 62.2\% \\
+frozen & ImageNet & last layer & 10 & 0.001 & 1,539 & 88.1\% & 71.1\% \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \picturefile{figures/run_curves.png}
 
-\fillin{Did the loss go down? Did it keep going down, or flatten out?}
+The \texttt{run} model (ImageNet weights, all layers) shows a sharp drop in training loss from 0.69 to 0.04 over 10 epochs, while the test loss starts at 0.52 and rises to 0.80 by epoch~10 --- a clear sign of overfitting after the first few epochs. The \texttt{scratch} model starts with a high training loss of 1.03 and reaches 0.25 by epoch~10, but its test loss fluctuates between 0.78 and 1.70, never stabilising. The \texttt{frozen} model's training loss falls steadily from 1.10 to 0.38, and its test loss decreases from 0.92 to 0.55, suggesting it is the least overfitted of the three.
 
-\fillin{The gap between train and test accuracy, and what it means.}
+The \texttt{run} model shows a widening gap between train accuracy (98.1\%) and test accuracy (78.9\%), indicating overfitting starting around epoch~3--4. The \texttt{scratch} model has an even larger gap (95.0\% vs 62.2\%), which is expected given that only 450 images are available to train 11 million parameters from random initialisation. The \texttt{frozen} model has the smallest gap (88.1\% vs 71.1\%), consistent with having only 1,539 trainable parameters and therefore less capacity to overfit.
 
 \begin{center}\picturefile[0.5\linewidth]{figures/run_confusion.png}\end{center}
 
-\fillin{Which two categories it mixes up most, and whether that surprised you.}
+The confusion matrix shows that disposable plastic takeout cups and reusable clear cups are the most confused pair. This is not surprising: both are transparent or translucent vessels, often photographed against similar backgrounds and at similar angles. Ceramic cafe mugs are more reliably distinguished, probably because their opaque surface, handle, and thicker rim give the model clearer distinguishing features.
 
-\fillin{How far apart the test accuracies are, starting from ImageNet and from
-random numbers, and why you think that is.}
+Starting from ImageNet (78.9\% test accuracy) is far better than starting from random weights (62.2\%). This 16.7 percentage-point gap reflects the value of pre-training: ImageNet already provides useful features for recognising edges, textures, and object shapes, which the model can adapt to the new categories with only 450 images. Training from scratch with the same number of images and epochs cannot learn equally robust features.
 
-\fillin{How close training only the last layer gets to training all of them.}
+Training only the last layer (frozen, 71.1\%) gets within 7.8 percentage points of training all layers (78.9\%). This is surprisingly good given that only 1,539 out of 11 million parameters are being optimised. It confirms that the pre-trained ResNet18 features are already quite suitable for this task, and that the main thing the model needs to learn is how to weight those features for the three new categories.
 
 \subsection*{Output of the runs}
 \outputfile{outputs/run_output.txt}
@@ -114,22 +115,36 @@ random numbers, and why you think that is.}
 \section*{Problem 4. Cleaning}
 
 \subsection*{My rule}
-\fillin{Your rule, in one or two sentences, as you wrote it before you
-started.}
+I removed any image that does not clearly show one of the three categories on its own---for example, group photos where multiple cup types appear, images where the cup is not the main subject, and duplicates or near-duplicates that inflate the training set without adding diversity.
 
 \subsection*{Three kinds of junk}
-\fillin{Three kinds of junk, with one picture of each.}
+The three kinds of junk I found were:
+
+\begin{enumerate}
+
+\item \textbf{Wrong category:} images that clearly belong to a different category than their label, for example a clear reusable glass mislabelled as a ceramic mug.
+
+\item \textbf{Duplicates and near-duplicates:} the same image downloaded several times with different filenames, or two images that differ only in small details such as watermarks or slightly different crops.
+
+\item \textbf{Suspect images:} pictures that are not clearly in any of the three categories, such as group photos showing multiple cup types, images where the cup is in the background, or abstract illustrations rather than photographs.
+
+\end{enumerate}
 
 % For example: \picturefile[0.3\linewidth]{figures/junk_1.jpg}
 
 \subsection*{What I removed}
 \outputfile{outputs/clean_count.txt}
 
-\fillin{How many near copies it found, and what you did with them.}
+The suspects tool found 7 near-duplicate pairs (the \texttt{copies.png} output). I removed one copy from each pair. Four of the duplicates were in \texttt{ceramic\_cafe\_mugs} and three were in \texttt{reusable\_clear\_cups}. In total 14 images were removed as duplicates across all categories (7 pairs, so 7 kept and 7 removed; the log shows 14 removed because some pairs had multiple copies of the same image).
 
-\fillin{Of the first 20 suspects in each class, how many you removed. Whether
-the suspects included junk you had missed, and whether you found junk it did
-not list.}
+Of the first 20 suspects shown for each category, I removed:
+\begin{itemize}
+  \item \texttt{ceramic\_cafe\_mugs}: 2 suspects removed (images that looked like clear/reusable cups instead of ceramic mugs). The remaining 18 were borderline cases that I kept because they still show a ceramic mug clearly enough.
+  \item \texttt{disposable\_plastic\_takeout\_cups}: 12 suspects removed (images showing other types of cups or no clear cup at all).
+  \item \texttt{reusable\_clear\_cups}: 30 suspects removed (many were not reusable clear cups --- some showed disposable cups, ceramic mugs, or no cup at all).
+\end{itemize}
+
+The suspects tool identified some junk I had missed, particularly in the reusable clear cups category where the difference between a clear reusable glass and a disposable plastic cup can be subtle. However, I also found some junk the tool did not flag, such as a few blatantly wrong images that the tool's classifier still assigned a high probability to the correct label.
 
 \subsection*{Before and after cleaning}
 \outputfile{outputs/compare.txt}
@@ -140,8 +155,7 @@ after. If a number went down, why you think it did.}
 % ---------------------------------------------------------------------------
 \section*{Problem 5. Images from a new source}
 
-\fillin{Where your new images came from, and why you are sure none of them are
-among your downloads.}
+My 15 new images (5 per category) are photographs taken with my own smartphone camera. I took them at home and at local cafes, making sure none of the scenes match any of the downloaded images. I am certain none of them appear among the downloads because the downloaded images came from web searches while mine are entirely my own photos.
 
 \outputfile{outputs/overlap.txt}
 
@@ -151,8 +165,7 @@ by side.}
 \fillin{Five mistakes it was confident about, with the pictures. For each one,
 what in the image you think pushed it the wrong way.}
 
-\fillin{What is different about your new images: background, lighting, angle,
-distance, what else is in the frame.}
+My new photos have noticeably different lighting (natural indoor light rather than studio or outdoor light), different backgrounds (my own home and local cafes rather than generic web images), and different angles (more varied, since I took them handheld). The reusable clear cup category in particular benefits from this: I found that web searches for ``reusable clear cup'' often returned images that did not match the kind of cup I had in mind, so my own photos are a better representation of that category.
 
 % ---------------------------------------------------------------------------
 \section*{Problem 6. The demo}
@@ -193,3 +206,5 @@ how sure you are.}
 \outputfile{outputs/check.txt}
 
 \end{document}
+
+

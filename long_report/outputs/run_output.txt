@@ -1,0 +1,30 @@
+reading /content/drive/MyDrive/mas1004/assignment1/data/clean
+450 images, 3 classes, read in 13 s
+  ceramic_cafe_mugs        150
+  disposable_plastic_takeout_cups 150
+  reusable_clear_cups      150
+training on 360, testing on 90
+model has 11,178,051 parameters, 11,178,051 of them will be trained
+Epoch  1/10  train loss 0.6924  acc 0.6944  test loss 0.5220  acc 0.7667
+Epoch  2/10  train loss 0.2030  acc 0.9389  test loss 0.5609  acc 0.7778
+Epoch  3/10  train loss 0.1151  acc 0.9750  test loss 0.5483  acc 0.8000
+Epoch  4/10  train loss 0.0794  acc 0.9806  test loss 0.6095  acc 0.7778
+Epoch  5/10  train loss 0.0734  acc 0.9722  test loss 0.6426  acc 0.8000
+Epoch  6/10  train loss 0.0679  acc 0.9694  test loss 0.7040  acc 0.7778
+Epoch  7/10  train loss 0.0537  acc 0.9694  test loss 0.7143  acc 0.8111
+Epoch  8/10  train loss 0.0469  acc 0.9778  test loss 0.7161  acc 0.7889
+Epoch  9/10  train loss 0.0563  acc 0.9833  test loss 0.7251  acc 0.7889
+Epoch 10/10  train loss 0.0446  acc 0.9778  test loss 0.8041  acc 0.7889
+
+trained in 0.2 minutes
+train accuracy 98.1%
+test  accuracy 78.9%
+wrote /content/drive/MyDrive/mas1004/assignment1/results/run_curves.png
+wrote /content/drive/MyDrive/mas1004/assignment1/results/run_confusion.png
+wrote /content/drive/MyDrive/mas1004/assignment1/results/run_worst.png
+wrote /content/drive/MyDrive/mas1004/assignment1/results/run_model.pt
+
+One line for your experiment table:
+| run | ImageNet | all layers | 10 | 0.0001 | 11,178,051 | 98.1% | 78.9% |
+
+To put this model on your web page: python src/export_web.py --tag run

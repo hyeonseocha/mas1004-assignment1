@@ -1,0 +1,20 @@
+describing 453 images with ResNet18 ...
+  32/453
+  64/453
+  96/453
+  128/453
+  160/453
+  192/453
+  224/453
+  256/453
+  288/453
+  320/453
+  352/453
+  384/453
+  416/453
+  448/453
+  453/453
+none of your 15 new images is a near copy of any of the 438 images you downloaded
+
+the closest any new image comes to a downloaded one: 0.83 (near copies are above 0.95)
+EXIT CODE: 0 

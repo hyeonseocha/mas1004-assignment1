@@ -1,0 +1,30 @@
+reading /content/drive/MyDrive/mas1004/assignment1/data/clean
+450 images, 3 classes, read in 13 s
+  ceramic_cafe_mugs        150
+  disposable_plastic_takeout_cups 150
+  reusable_clear_cups      150
+training on 360, testing on 90
+model has 11,178,051 parameters, 11,178,051 of them will be trained
+Epoch  1/10  train loss 1.0317  acc 0.4750  test loss 0.8526  acc 0.5889
+Epoch  2/10  train loss 0.7565  acc 0.6472  test loss 0.9602  acc 0.4778
+Epoch  3/10  train loss 0.5974  acc 0.7417  test loss 0.8051  acc 0.5889
+Epoch  4/10  train loss 0.5110  acc 0.7778  test loss 0.9860  acc 0.5111
+Epoch  5/10  train loss 0.3633  acc 0.8528  test loss 0.8623  acc 0.6778
+Epoch  6/10  train loss 0.2831  acc 0.9000  test loss 0.7802  acc 0.7111
+Epoch  7/10  train loss 0.2456  acc 0.9028  test loss 0.9506  acc 0.5778
+Epoch  8/10  train loss 0.2350  acc 0.9111  test loss 1.6975  acc 0.4667
+Epoch  9/10  train loss 0.2822  acc 0.9111  test loss 1.3100  acc 0.5000
+Epoch 10/10  train loss 0.2549  acc 0.9278  test loss 1.1777  acc 0.6222
+
+trained in 0.2 minutes
+train accuracy 95.0%
+test  accuracy 62.2%
+wrote /content/drive/MyDrive/mas1004/assignment1/results/scratch_curves.png
+wrote /content/drive/MyDrive/mas1004/assignment1/results/scratch_confusion.png
+wrote /content/drive/MyDrive/mas1004/assignment1/results/scratch_worst.png
+wrote /content/drive/MyDrive/mas1004/assignment1/results/scratch_model.pt
+
+One line for your experiment table:
+| scratch | random | all layers | 10 | 0.0001 | 11,178,051 | 95.0% | 62.2% |
+
+To put this model on your web page: python src/export_web.py --tag scratch

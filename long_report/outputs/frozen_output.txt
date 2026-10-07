@@ -1,0 +1,30 @@
+reading /content/drive/MyDrive/mas1004/assignment1/data/clean
+450 images, 3 classes, read in 14 s
+  ceramic_cafe_mugs        150
+  disposable_plastic_takeout_cups 150
+  reusable_clear_cups      150
+training on 360, testing on 90
+model has 11,178,051 parameters, 1,539 of them will be trained
+Epoch  1/10  train loss 1.0984  acc 0.4278  test loss 0.9179  acc 0.6222
+Epoch  2/10  train loss 0.8009  acc 0.6917  test loss 0.7612  acc 0.6333
+Epoch  3/10  train loss 0.6395  acc 0.7667  test loss 0.6624  acc 0.7111
+Epoch  4/10  train loss 0.5464  acc 0.8056  test loss 0.6190  acc 0.7222
+Epoch  5/10  train loss 0.4996  acc 0.8250  test loss 0.6048  acc 0.7222
+Epoch  6/10  train loss 0.5145  acc 0.7972  test loss 0.5758  acc 0.6778
+Epoch  7/10  train loss 0.4422  acc 0.8361  test loss 0.5609  acc 0.7333
+Epoch  8/10  train loss 0.4229  acc 0.8500  test loss 0.5527  acc 0.7222
+Epoch  9/10  train loss 0.3854  acc 0.8806  test loss 0.5504  acc 0.7333
+Epoch 10/10  train loss 0.3785  acc 0.8611  test loss 0.5630  acc 0.7111
+
+trained in 0.1 minutes
+train accuracy 88.1%
+test  accuracy 71.1%
+wrote /content/drive/MyDrive/mas1004/assignment1/results/frozen_curves.png
+wrote /content/drive/MyDrive/mas1004/assignment1/results/frozen_confusion.png
+wrote /content/drive/MyDrive/mas1004/assignment1/results/frozen_worst.png
+wrote /content/drive/MyDrive/mas1004/assignment1/results/frozen_model.pt
+
+One line for your experiment table:
+| frozen | ImageNet | last layer | 10 | 0.001 | 1,539 | 88.1% | 71.1% |
+
+To put this model on your web page: python src/export_web.py --tag frozen

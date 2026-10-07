@@ -1,0 +1,13 @@
+﻿class                    downloaded  removed   kept  other
+ceramic_cafe_mugs               150       16    134      0
+disposable_plastic_takeout_cups        150       12    138      0
+reusable_clear_cups             150       37    113      0
+
+reasons
+    30  not a reusable clear cup (suspect image)
+    14  near-duplicate image, keeping one copy
+    12  not a disposable plastic takeout cup
+     7  same image as a disposable takeout cup; removing the reusable copy
+     2  not a ceramic mug, looks like a clear/reusable cup
+
+"other" is images that are in data/raw but neither in data/clean nor removed with `clean.py remove`, for example ones you deleted by hand. Their reasons are not recorded.
