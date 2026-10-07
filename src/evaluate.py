@@ -88,7 +88,27 @@ def worst_examples(model, X, y, paths, k=10):
     These are the images to put in your report. A mistake the model was sure
     about tells you much more than a mistake it was unsure about.
     """
-    raise NotImplementedError("Problem 5: fill in worst_examples")
+    from scipy.special import softmax
+
+    logits = predict_logits(model, X)
+    probs = softmax(logits, axis=1)
+
+    predictions = np.argmax(probs, axis=1)
+
+    mistakes = []
+    for i in range(len(y)):
+        if predictions[i] != y[i]:
+            mistakes.append({
+                "path": paths[i],
+                "true": int(y[i]),
+                "predicted": int(predictions[i]),
+                "confidence": float(probs[i, predictions[i]]),
+            })
+
+    # Sort by confidence descending (most confident mistake first)
+    mistakes.sort(key=lambda m: m["confidence"], reverse=True)
+
+    return mistakes[:k]
 
 
 # ---------------------------------------------------------------------------
