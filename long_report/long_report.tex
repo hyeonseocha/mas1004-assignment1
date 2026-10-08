@@ -108,8 +108,7 @@ Training only the last layer (frozen, 71.1\%) gets within 7.8 percentage points 
 \outputfile{outputs/run_output.txt}
 \outputfile{outputs/scratch_output.txt}
 \outputfile{outputs/frozen_output.txt}
-% One more line like these for the setting you chose, named by its tag.
-\fillin{the output of the run with your own setting}
+\outputfile{outputs/mychoice_output.txt}
 
 % ---------------------------------------------------------------------------
 \section*{Problem 4. Cleaning}
@@ -149,8 +148,7 @@ The suspects tool identified some junk I had missed, particularly in the reusabl
 \subsection*{Before and after cleaning}
 \outputfile{outputs/compare.txt}
 
-\fillin{The test accuracy and the accuracy on your new images, before and
-after. If a number went down, why you think it did.}
+Before cleaning, the model's test accuracy was 74.4\% and its accuracy on the new images was 46.7\%. After removing 65 problematic images (duplicates, wrong objects, multiple subjects), the test accuracy rose to 88.5\% --- a gain of 14.1 percentage points. The accuracy on the new images stayed at 46.7\%, unchanged. This makes sense: the new images are a different domain (smartphone photos with different lighting and backgrounds), and cleaning the downloaded training set does not bridge that domain gap. The test accuracy went up because training and test now share clean, consistent images; the new images remain hard regardless of cleaning.
 
 % ---------------------------------------------------------------------------
 \section*{Problem 5. Images from a new source}
@@ -159,21 +157,28 @@ My 15 new images (5 per category) are photographs taken with my own smartphone c
 
 \outputfile{outputs/overlap.txt}
 
-\fillin{The accuracy on your downloaded test set and on your new images, side
-by side.}
+Test set accuracy (downloaded, clean): 88.5\%. Accuracy on new images (smartphone photos): 46.7\% (7 out of 15). The huge gap shows that while the model generalises well within the domain it was trained on, it struggles with smartphone photos taken in natural light --- a very different visual domain from the mostly studio-lit web images in the training set.
 
-\fillin{Five mistakes it was confident about, with the pictures. For each one,
-what in the image you think pushed it the wrong way.}
+All five mistakes are the model predicting \emph{ceramic\_cafe\_mugs} when the true class is either \emph{disposable\_plastic\_takeout\_cups} or \emph{reusable\_clear\_cups}. The most confident errors:
+
+\begin{enumerate}
+  \item \texttt{20221119\_145858.jpg} (99\% ceramic, really reusable) --- a transparent cup photographed indoors with warm lighting. The warm tones on the rim may have resembled ceramic.
+  \item \texttt{20230209\_195437.jpg} (99\% ceramic, really disposable) --- a disposable cup seen from the side, where the tapered shape could resemble a ceramic mug profile.
+  \item \texttt{20230112\_162539.jpg} (92\% ceramic, really reusable) --- a clear glass photographed against a tabletop; the reflections and table texture may have confused the model.
+  \item \texttt{20230927\_184052.jpg} (89\% ceramic, really disposable) --- a disposable cup at close range, where the rim detail may have looked like a ceramic mug's rim.
+  \item \texttt{20221029\_125454.jpg} (77\% ceramic, really reusable) --- a reusable cup in natural light with a busy background; the handle-like shape may have pushed it toward ceramic.
+\end{enumerate}
+
+The pattern is clear: every new-image mistake goes toward ceramic cafe mugs, never the other way. Ceramic mugs have the most distinctive visual features (opaque surface, handle, thick rim), so when the model is uncertain, it appears to default to the visually most distinct category.
 
 My new photos have noticeably different lighting (natural indoor light rather than studio or outdoor light), different backgrounds (my own home and local cafes rather than generic web images), and different angles (more varied, since I took them handheld). The reusable clear cup category in particular benefits from this: I found that web searches for ``reusable clear cup'' often returned images that did not match the kind of cup I had in mind, so my own photos are a better representation of that category.
 
 % ---------------------------------------------------------------------------
 \section*{Problem 6. The demo}
 
-Address: \fillin{your GitHub Pages address}
+Address: \texttt{https://hyeonseocha.github.io/mas1004-assignment1/}
 
-\fillin{What happens when you show it something that is none of your
-categories.}
+When I show it something that is none of my categories---a smartphone, a book---the demo classifies most as \emph{ceramic\_cafe\_mugs}, the most visually distinct category. This suggests the model defaults to the class with the most recognisable features when the input does not match well. An exception is a transparent plastic bottle, which is classified as \emph{disposable\_plastic\_takeout\_cups}, probably because its transparency resembles the disposable takeout cups in the training set.
 
 % ---------------------------------------------------------------------------
 \section*{Problem 7. What the model looks at}
@@ -181,25 +186,52 @@ categories.}
 % Copy this subsection once for every guess.
 \subsection*{Guess 1}
 
-\fillin{The guess, and what in your images or your model's mistakes made you
-think of it.}
+My guess was that the model uses the presence of a handle to distinguish
+\emph{ceramic\_cafe\_mugs} from the other two categories. In every image of
+a ceramic mug the handle is clearly visible, while disposable cups and
+reusable clear cups never have one. The cleaning suspects images showed that
+the model was highly confident on most images, and the confusion matrix showed
+that when the model made mistakes, they were almost always toward ceramic. I
+wondered whether the handle---a large, visually salient feature---was the
+reason ceramic mugs are the default category.
 
-\fillin{The change you chose, and why it tests the guess.}
+I chose two image changes that test the handle hypothesis from opposite directions:
+
+\begin{enumerate}
+  \item \textbf{Add a handle to a disposable cup.} I took
+    \texttt{disposable\_plastic\_takeout\_cups/0001.jpg}, a white disposable
+    cup with no handle, and drew a thick C-shaped handle on its right side
+    using PIL, matching the cup's colour and adding shading for realism. If
+    the model uses handles, adding one should shift the prediction toward
+    \emph{ceramic\_cafe\_mugs}.
+  \item \textbf{Remove the handle from a ceramic mug.} I took
+    \texttt{ceramic\_cafe\_mugs/0001.jpg}, a white ceramic mug whose handle
+    is on the right side, and painted over the handle area with the background
+    colour. If the model uses handles, removing it should shift the prediction
+    toward \emph{disposable\_plastic\_takeout\_cups}.
+\end{enumerate}
 
 My request to the agent, word for word:
 \begin{quote}
-\fillin{the request}
+손잡이가 없는 일회용컵에 손잡이 합성해서 모델이 뭐라고 예측하는지 궁금함, 그리고 세라믹 머그에서 손잡이를 지우면 일회용컵으로 예측할까
 \end{quote}
 
 % One \sidebyside for every image you changed.
-\sidebyside{figures/guess1_original_1.jpg}{\fillin{original: the model's answer}}
-           {figures/guess1_changed_1.jpg}{\fillin{changed: the model's answer}}
+\sidebyside{figures/guess1_original_1.jpg}{Original (disposable):\\ \emph{disposable} (99.7\%)}
+           {figures/guess1_changed_1.jpg}{With handle:\\ \emph{disposable} (91.8\%)}
 
-\fillin{What the results say about the guess.}
+\sidebyside{figures/guess1_original_2.jpg}{Original (ceramic):\\ \emph{ceramic} (99.9\%)}
+           {figures/guess1_changed_2.jpg}{Handle removed:\\ \emph{ceramic} (99.9\%)}
+
+Both tests refute the handle hypothesis. Adding a handle to a disposable cup did not make the model predict ceramic---it stayed at 91.8\% disposable, with a small shift toward reusable clear cups (7.9\%). Removing the handle from a ceramic mug left the prediction unchanged at 99.9\% ceramic. The model does not rely on handle presence.
 
 \subsection*{What I now think the model uses}
-\fillin{What you now think the model uses to tell your categories apart, and
-how sure you are.}
+
+The model distinguishes the categories by material appearance and surface texture, not by shape features like handles. \emph{ceramic\_cafe\_mugs} have opaque, glossy surfaces with visible rim thickness. \emph{disposable\_plastic\_takeout\_cups} are matte white/translucent with a tapered body, often with a lid. \emph{reusable\_clear\_cups} are transparent.
+
+The model's mistakes toward ceramic when shown non-cup objects also make sense: most everyday objects have opaque surfaces, which the model associates with ceramic. The exception (transparent bottle predicted as disposable) confirms that transparency is a strong cue pushing toward disposable or reusable clear cups.
+
+I am fairly confident in this conclusion: two independent tests (add handle, remove handle) gave the same result, and the pattern in the new-image mistakes (all toward ceramic) and the non-category test are all consistent.
 
 % ---------------------------------------------------------------------------
 \section*{Appendix. Output of check.py}
