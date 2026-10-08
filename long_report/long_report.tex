@@ -93,7 +93,7 @@ mychoice & ImageNet & all layers & 20 & 0.0005 & 11,178,051 & 100.0\% & 84.6\% \
 
 \picturefile{figures/run_curves.png}
 
-The \texttt{run} model (ImageNet weights, all layers) shows a sharp drop in training loss from 0.69 to 0.04 over 10 epochs, while the test loss starts at 0.52 and rises to 0.80 by epoch~10 --- a clear sign of overfitting after the first few epochs. The \texttt{scratch} model starts with a high training loss of 1.03 and reaches 0.25 by epoch~10, but its test loss fluctuates between 0.78 and 1.70, never stabilising. The \texttt{frozen} model's training loss falls steadily from 1.10 to 0.38, and its test loss decreases from 0.92 to 0.55, suggesting it is the least overfitted of the three.
+The \texttt{run} model (ImageNet weights, all layers) shows a sharp drop in training loss from 0.69 to 0.04 over 10 epochs, while the test loss starts at 0.52 and rises to 0.80 by epoch~10 --- a clear sign of overfitting after the first few epochs. The \texttt{scratch} model starts with a high training loss of 1.03 and reaches 0.25 by epoch~10, but its test loss fluctuates between 0.78 and 1.70, never stabilising. The \texttt{frozen} model's training loss falls steadily from 1.10 to 0.38, and its test loss decreases from 0.92 to 0.56, suggesting it is the least overfitted of the three.
 
 The \texttt{run} model shows a widening gap between train accuracy (98.1\%) and test accuracy (78.9\%), indicating overfitting starting around epoch~3--4. The \texttt{scratch} model has an even larger gap (95.0\% vs 62.2\%), which is expected given that only 450 images are available to train 11 million parameters from random initialisation. The \texttt{frozen} model has the smallest gap (88.1\% vs 71.1\%), consistent with having only 1,539 trainable parameters and therefore less capacity to overfit.
 
@@ -160,7 +160,7 @@ My 15 new images (5 per category) are photographs taken with my own smartphone c
 
 Test set accuracy (downloaded, clean): 88.5\%. Accuracy on new images (smartphone photos): 46.7\% (7 out of 15). The huge gap shows that while the model generalises well within the domain it was trained on, it struggles with smartphone photos taken in natural light --- a very different visual domain from the mostly studio-lit web images in the training set.
 
-All five mistakes are the model predicting \emph{ceramic\_cafe\_mugs} when the true class is either \emph{disposable\_plastic\_takeout\_cups} or \emph{reusable\_clear\_cups}. The most confident errors:
+The five most confident mistakes all go toward \emph{ceramic\_cafe\_mugs} when the true class is either \emph{disposable\_plastic\_takeout\_cups} or \emph{reusable\_clear\_cups}. The most confident errors:
 
 \begin{enumerate}
   \item \texttt{20221119\_145858.jpg} (99\% ceramic, really reusable) --- a transparent cup photographed indoors with warm lighting. The warm tones on the rim may have resembled ceramic.
