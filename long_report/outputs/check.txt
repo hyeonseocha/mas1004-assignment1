@@ -1,0 +1,53 @@
+MAS1004 Assignment 1, checking your work
+
+Training images  (/content/drive/MyDrive/mas1004/assignment1/data/clean)
+------------------------------------------------------------------------
+  ceramic_cafe_mugs              134 images
+  disposable_plastic_takeout_cups   138 images
+  reusable_clear_cups            113 images
+
+Your images from a new source  (/content/drive/MyDrive/mas1004/assignment1/data/new_images)
+-------------------------------------------------------------------------------------------
+  ceramic_cafe_mugs                5 images
+  disposable_plastic_takeout_cups     5 images
+  reusable_clear_cups              5 images
+
+The same image appearing twice
+------------------------------
+  ok       no file appears twice byte for byte. Near copies (the same picture resized or re-saved) are only found by `python src/clean.py suspects` and `python src/clean.py overlap`.
+
+The model you exported for the web page
+---------------------------------------
+  ok       3 classes: ceramic_cafe_mugs, disposable_plastic_takeout_cups, reusable_clear_cups
+  ok       model.onnx is 44.8 MB, 11,178,051 parameters
+           input [1, 3, 224, 224], prepared as: shorter side 256, centre 224 x 224, mean [0.485, 0.456, 0.406], std [0.229, 0.224, 0.225]
+  warning  docs/model.onnx is not committed. Your published page will not have a model until you commit and push it.
+
+Does the exported model give the answers Python gave?
+-----------------------------------------------------
+  ok       yes, they agree (largest gap 0.0000)
+
+Your images from a new source  (/content/drive/MyDrive/mas1004/assignment1/data/new_images)
+-------------------------------------------------------------------------------------------
+
+  accuracy on your new images: 7/15 = 46.7%
+
+  rows are what it really is, columns are what the model said
+                                      ceramic_ disposab reusable
+    ceramic_cafe_mugs                        5        0        0
+    disposable_plastic_takeout_cups          3        2        0
+    reusable_clear_cups                      4        1        0
+
+  the mistakes it was most sure about:
+    20221119_145858.jpg          said ceramic_cafe_mugs (99%), really reusable_clear_cups
+    20230209_195437.jpg          said ceramic_cafe_mugs (99%), really disposable_plastic_takeout_cups
+    20230112_162539.jpg          said ceramic_cafe_mugs (92%), really reusable_clear_cups
+    20230927_184052.jpg          said ceramic_cafe_mugs (89%), really disposable_plastic_takeout_cups
+    20221029_125454.jpg          said ceramic_cafe_mugs (77%), really reusable_clear_cups
+
+Summary
+-------
+  nothing is broken
+  1 thing(s) worth a sentence in your report:
+    - docs/model.onnx is not committed. Your published page will not have a model until you commit and push it.
+

@@ -1,0 +1,40 @@
+reading /content/drive/MyDrive/mas1004/assignment1/data/clean
+385 images, 3 classes, read in 12 s
+  ceramic_cafe_mugs        134
+  disposable_plastic_takeout_cups 138
+  reusable_clear_cups      113
+training on 307, testing on 78
+model has 11,178,051 parameters, 11,178,051 of them will be trained
+Epoch  1/20  train loss 0.5752  acc 0.7134  test loss 0.7679  acc 0.7692
+Epoch  2/20  train loss 0.2527  acc 0.9251  test loss 1.3791  acc 0.7179
+Epoch  3/20  train loss 0.1047  acc 0.9739  test loss 0.8988  acc 0.8205
+Epoch  4/20  train loss 0.0517  acc 0.9837  test loss 0.4875  acc 0.8718
+Epoch  5/20  train loss 0.0467  acc 0.9837  test loss 0.9430  acc 0.7308
+Epoch  6/20  train loss 0.0600  acc 0.9739  test loss 0.3480  acc 0.8974
+Epoch  7/20  train loss 0.0347  acc 0.9837  test loss 0.5294  acc 0.8718
+Epoch  8/20  train loss 0.0300  acc 0.9805  test loss 1.0441  acc 0.7949
+Epoch  9/20  train loss 0.0945  acc 0.9642  test loss 0.7159  acc 0.7821
+Epoch 10/20  train loss 0.0593  acc 0.9805  test loss 0.5524  acc 0.8462
+Epoch 11/20  train loss 0.0324  acc 0.9837  test loss 1.2255  acc 0.7179
+Epoch 12/20  train loss 0.0286  acc 0.9870  test loss 0.4663  acc 0.8590
+Epoch 13/20  train loss 0.0350  acc 0.9870  test loss 0.3546  acc 0.8974
+Epoch 14/20  train loss 0.0253  acc 0.9902  test loss 0.5673  acc 0.8590
+Epoch 15/20  train loss 0.0506  acc 0.9837  test loss 0.6604  acc 0.8462
+Epoch 16/20  train loss 0.0548  acc 0.9805  test loss 0.6147  acc 0.8333
+Epoch 17/20  train loss 0.0409  acc 0.9772  test loss 0.6012  acc 0.8590
+Epoch 18/20  train loss 0.0104  acc 0.9967  test loss 0.4649  acc 0.8718
+Epoch 19/20  train loss 0.0311  acc 0.9935  test loss 0.4317  acc 0.8974
+Epoch 20/20  train loss 0.0337  acc 0.9967  test loss 0.6356  acc 0.8462
+
+trained in 0.4 minutes
+train accuracy 100.0%
+test  accuracy 84.6%
+wrote /content/drive/MyDrive/mas1004/assignment1/results/mychoice_curves.png
+wrote /content/drive/MyDrive/mas1004/assignment1/results/mychoice_confusion.png
+wrote /content/drive/MyDrive/mas1004/assignment1/results/mychoice_worst.png
+wrote /content/drive/MyDrive/mas1004/assignment1/results/mychoice_model.pt
+
+One line for your experiment table:
+| mychoice | ImageNet | all layers | 20 | 0.0005 | 11,178,051 | 100.0% | 84.6% |
+
+To put this model on your web page: python src/export_web.py --tag mychoice

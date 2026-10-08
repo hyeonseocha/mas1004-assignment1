@@ -1,0 +1,37 @@
+MAS1004 Assignment 1, checking your work
+
+Training images  (/content/drive/MyDrive/mas1004/assignment1/data/clean)
+------------------------------------------------------------------------
+  ceramic_cafe_mugs              150 images
+  disposable_plastic_takeout_cups   150 images
+  reusable_clear_cups            150 images
+
+Your images from a new source  (/content/drive/MyDrive/mas1004/assignment1/data/new_images)
+-------------------------------------------------------------------------------------------
+  ceramic_cafe_mugs                5 images
+  disposable_plastic_takeout_cups     5 images
+  reusable_clear_cups              5 images
+
+The same image appearing twice
+------------------------------
+  PROBLEM  12 image(s) appear in more than one place, including across different classes or across your downloads and your new images. Test accuracy measured on an image the model trained on means nothing.
+           data/clean/disposable_plastic_takeout_cups/0003.jpg  ==  data/clean/reusable_clear_cups/0012.jpg
+           data/clean/disposable_plastic_takeout_cups/0013.jpg  ==  data/clean/reusable_clear_cups/0140.jpg
+           data/clean/disposable_plastic_takeout_cups/0033.jpg  ==  data/clean/reusable_clear_cups/0120.jpg
+
+The model you exported for the web page
+---------------------------------------
+  PROBLEM  docs/ is missing model.onnx, model.json, selftest.json. Run src/run.py and then src/export_web.py first.
+
+Your saved runs on your new images  (/content/drive/MyDrive/mas1004/assignment1/data/new_images)
+------------------------------------------------------------------------------------------------
+  run               test accuracy   new images
+  run                       74.4%        46.7%   (7/15)
+  clean                     88.5%        46.7%   (7/15)
+
+Summary
+-------
+  2 thing(s) to fix:
+    - 12 image(s) appear in more than one place, including across different classes or across your downloads and your new images. Test accuracy measured on an image the model trained on means nothing.
+    - docs/ is missing model.onnx, model.json, selftest.json. Run src/run.py and then src/export_web.py first.
+
